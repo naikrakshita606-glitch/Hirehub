@@ -1,0 +1,5 @@
+from app.repositories.user_repository import UserRepository
+from app.repositories.job_repository import JobRepository
+from app.repositories.application_repository import ApplicationRepository
+from app.repositories.interview_repository import InterviewRepository
+from app.repositories.analytics_repository import AnalyticsRepository

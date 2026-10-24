@@ -1,0 +1,5 @@
+body { font-family: Arial, sans-serif; }
+.hero-section { background: linear-gradient(135deg, #0d6efd, #0b5ed7); }
+.feature-card { background: #fff; }
+.stat-box { background: #f8f9fa; border-radius: 12px; padding: 18px 10px; }
+.card { border-radius: 16px; }

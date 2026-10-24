@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card p-3 shadow-sm">
+                <h5>Candidate</h5>
+                <p>{{ current_user.full_name }}</p>
+                <a class="btn btn-outline-primary btn-sm" href="{{ url_for('candidate.profile') }}">Edit profile</a>
+            </div>
+        </div>
+        <div class="col-md-9">
+            <h2>My dashboard</h2>
+            <div class="row g-3 mt-2">
+                <div class="col-md-4">
+                    <div class="card p-3 bg-light h-100"><strong>Jobs</strong><div class="display-6">{{ jobs|length }}</div></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 bg-light h-100"><strong>Applications</strong><div class="display-6">{{ applications|length }}</div></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card p-3 bg-light h-100"><strong>Interviews</strong><div class="display-6">{{ interviews|length }}</div></div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <h4>{% if recommendations %}Recommended jobs{% else %}Open jobs{% endif %}</h4>
+                <div class="list-group">
+                    {% for job in (recommendations if recommendations else jobs)[:5] %}
+                        <a class="list-group-item list-group-item-action" href="{{ url_for('jobs.job_detail', job_id=job.id) }}">
+                            <strong>{{ job.title }}</strong> - {{ job.company }} ({{ job.location }})
+                        </a>
+                    {% else %}
+                        <p>No open jobs are available right now.</p>
+                    {% endfor %}
+                </div>
+                <a class="btn btn-outline-primary btn-sm mt-2" href="{{ url_for('candidate.jobs') }}">Browse and filter jobs</a>
+                {% if recommendations %}
+                    <a class="btn btn-outline-secondary btn-sm mt-2" href="{{ url_for('candidate.recommendations') }}">All recommendations</a>
+                {% endif %}
+            </div>
+            <div class="mt-4">
+                <h4>Recent applications</h4>
+                <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('candidate.applications') }}">Track applications</a>
+                <a class="btn btn-outline-secondary btn-sm" href="{{ url_for('candidate.interviews') }}">My interviews</a>
+            </div>
+            <div class="mt-4">
+                <h4>Notifications</h4>
+                {% for notification in notifications[:3] %}
+                    <div class="alert {% if notification.is_read %}alert-light{% else %}alert-info{% endif %} py-2">{{ notification.title }}: {{ notification.message }}</div>
+                {% else %}
+                    <p>No notifications.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

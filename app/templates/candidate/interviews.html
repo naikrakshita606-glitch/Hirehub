@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2>My interviews</h2>
+    {% for interview in interviews %}
+        <div class="card mb-3"><div class="card-body">
+            <strong>{{ interview.scheduled_at }}</strong>
+            <span class="badge bg-primary">{{ interview.status }}</span>
+            <div>{{ interview.mode|title }}{% if interview.notes %} · {{ interview.notes }}{% endif %}</div>
+        </div></div>
+    {% else %}
+        <p>No interviews scheduled.</p>
+    {% endfor %}
+</div>
+{% endblock %}

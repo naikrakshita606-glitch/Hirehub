@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2>Applications</h2>
+    <p><a class="btn btn-primary" href="{{ url_for('recruiter.interviews') }}">Schedule interviews</a></p>
+    {% for application in applications %}
+    <div class="card mb-3">
+        <div class="card-body">
+            <div class="d-flex justify-content-between flex-wrap gap-2">
+                <div>
+                    <h5>{{ jobs.get(application.job_id, {}).get('title', 'Job') }}</h5>
+                    <strong>Candidate:</strong> {{ candidates.get(application.candidate_id, {}).get('full_name', 'Candidate') }}
+                    <span class="text-muted">({{ candidates.get(application.candidate_id, {}).get('email', '') }})</span>
+                    <div><strong>Applied:</strong> {{ application.created_at }}</div>
+                    {% if candidates.get(application.candidate_id, {}).get('resume_filename') %}
+                        <a class="btn btn-sm btn-outline-secondary mt-2" href="{{ url_for('recruiter.candidate_resume', candidate_id=application.candidate_id) }}">Download resume</a>
+                    {% endif %}
+                    {% if application.cover_letter %}<p class="mt-2">{{ application.cover_letter }}</p>{% endif %}
+                </div>
+                <div>
+                    <span class="badge bg-primary">{{ application.status }}</span>
+                    {% if interviews.get(application.id) %}
+                        <div class="small mt-2">Interview: {{ interviews.get(application.id).scheduled_at }}</div>
+                    {% endif %}
+                </div>
+            </div>
+            <form method="post" action="{{ url_for('recruiter.update_application_status', application_id=application.id) }}" class="mt-3 d-flex gap-2">
+                <select class="form-select form-select-sm w-auto" name="status">
+                    {% for status in ['reviewing', 'shortlisted', 'rejected', 'hired'] %}<option value="{{ status }}">{{ status|title }}</option>{% endfor %}
+                </select>
+                <button class="btn btn-sm btn-outline-primary">Update status</button>
+            </form>
+        </div>
+    </div>
+    {% else %}
+        <p>No applications received yet.</p>
+    {% endfor %}
+</div>
+{% endblock %}

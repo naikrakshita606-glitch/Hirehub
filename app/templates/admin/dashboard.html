@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2>Admin dashboard</h2>
+    <div class="row g-3 mt-2">
+        <div class="col-md-3"><div class="card p-3 bg-light"><strong>Users</strong><div class="display-6">{{ metrics.total_users }}</div></div></div>
+        <div class="col-md-3"><div class="card p-3 bg-light"><strong>Jobs</strong><div class="display-6">{{ metrics.total_jobs }}</div></div></div>
+        <div class="col-md-3"><div class="card p-3 bg-light"><strong>Applications</strong><div class="display-6">{{ metrics.total_applications }}</div></div></div>
+        <div class="col-md-3"><div class="card p-3 bg-light"><strong>Candidates</strong><div class="display-6">{{ metrics.candidate_count }}</div></div></div>
+    </div>
+    <div class="mt-4">
+        <a href="{{ url_for('admin.users') }}" class="btn btn-primary me-2">Users</a>
+        <a href="{{ url_for('admin.reports') }}" class="btn btn-outline-primary">Reports</a>
+        <a href="{{ url_for('admin.audit_logs') }}" class="btn btn-outline-secondary">Audit logs</a>
+        <a href="{{ url_for('admin.profile') }}" class="btn btn-outline-secondary">Edit profile</a>
+    </div>
+</div>
+{% endblock %}

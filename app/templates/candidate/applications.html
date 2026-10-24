@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2>My applications</h2>
+    {% for application in applications %}
+        <div class="card mb-3">
+            <div class="card-body">
+                <strong>{{ jobs.get(application.job_id, {}).get('title', 'Job no longer available') }}</strong>
+                <span class="badge bg-primary ms-2">{{ application.status }}</span>
+                <div class="text-muted small mt-2">Applied {{ application.created_at }}</div>
+                {% if application.cover_letter %}<p class="mt-2 mb-0">{{ application.cover_letter }}</p>{% endif %}
+            </div>
+        </div>
+    {% else %}
+        <p>You have not applied to any jobs yet. <a href="{{ url_for('candidate.jobs') }}">Browse open jobs</a>.</p>
+    {% endfor %}
+</div>
+{% endblock %}

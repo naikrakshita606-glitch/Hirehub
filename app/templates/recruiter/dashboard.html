@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2>Recruiter dashboard</h2>
+    <div class="row g-3 mt-2">
+        <div class="col-md-4"><div class="card p-3 bg-light"><strong>Open jobs</strong><div class="display-6">{{ open_jobs|length }}</div></div></div>
+        <div class="col-md-4"><div class="card p-3 bg-light"><strong>Applications</strong><div class="display-6">{{ applications|length }}</div></div></div>
+        <div class="col-md-4"><div class="card p-3 bg-light"><strong>Interviews</strong><div class="display-6">{{ interviews|length }}</div></div></div>
+    </div>
+    <div class="mt-4">
+        <a class="btn btn-primary" href="{{ url_for('recruiter.jobs') }}">Manage jobs</a>
+        <a class="btn btn-outline-primary" href="{{ url_for('recruiter.applications') }}">Review applications</a>
+        <a class="btn btn-outline-primary" href="{{ url_for('recruiter.profile') }}">Edit profile</a>
+    </div>
+    <h4 class="mt-4">Notifications</h4>
+    {% for notification in notifications[:5] %}
+        <div class="alert alert-info">{{ notification.title }}: {{ notification.message }}</div>
+    {% else %}
+        <p>No notifications.</p>
+    {% endfor %}
+</div>
+{% endblock %}

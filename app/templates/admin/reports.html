@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2>Reports</h2>
+    <div class="row">
+        <div class="col-md-6"><div class="card p-3"><h5>Summary</h5><p>{{ users|length }} users, {{ metrics.open_jobs }} open jobs, {{ metrics.closed_jobs }} closed jobs, {{ applications|length }} applications.</p><a href="{{ url_for('admin.audit_logs') }}">View audit logs</a><a class="btn btn-outline-primary d-block mt-3" href="{{ url_for('admin.export_reports') }}">Download CSV report</a></div></div>
+        <div class="col-md-6"><div class="card p-3"><h5>Analytics</h5><canvas id="reportChart" height="120"></canvas></div></div>
+    </div>
+    <h3 class="mt-4">Application pipeline</h3>
+    <div class="row g-3">
+        {% for status, count in metrics.application_statuses.items() %}
+        <div class="col-6 col-md-2"><div class="card p-3"><strong>{{ status|title }}</strong><div class="h3 mb-0">{{ count }}</div></div></div>
+        {% endfor %}
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const ctx = document.getElementById('reportChart');
+if (ctx) {
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: ['Users', 'Jobs', 'Applications'],
+      datasets: [{
+        label: 'Counts',
+        data: [{{ metrics.total_users }}, {{ metrics.open_jobs }}, {{ metrics.total_applications }}],
+        backgroundColor: ['#0d6efd', '#198754', '#ffc107']
+      }]
+    }
+  });
+}
+</script>
+{% endblock %}

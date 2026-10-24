@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-4">
+            <h2>Profile management</h2>
+            <form method="post" enctype="multipart/form-data">
+                <div class="row g-3">
+                    <div class="col-md-6"><label class="form-label">Full name</label><input class="form-control" type="text" value="{{ user.full_name }}" name="full_name" required></div>
+                    <div class="col-md-6"><label class="form-label">Phone</label><input class="form-control" type="text" value="{{ user.phone }}" name="phone"></div>
+                    <div class="col-md-6"><label class="form-label">Location</label><input class="form-control" type="text" value="{{ user.location }}" name="location"></div>
+                    <div class="col-md-6"><label class="form-label">Experience</label><input class="form-control" type="text" value="{{ user.experience if user.experience else '0 years' }}" name="experience"></div>
+                    <div class="col-md-6"><label class="form-label">Skills</label><input class="form-control" type="text" value="{{ ', '.join(user.skills) }}" name="skills"></div>
+                    <div class="col-12"><label class="form-label">Summary</label><textarea class="form-control" rows="4" name="summary">{{ user.summary if user.summary else '' }}</textarea></div>
+                    <div class="col-12">
+                        <label class="form-label">Resume (PDF, DOC, or DOCX; maximum 16 MB)</label>
+                        <input class="form-control" type="file" name="resume" accept=".pdf,.doc,.docx">
+                        {% if user.resume_filename %}
+                            <a class="d-inline-block mt-2" href="{{ url_for('candidate.view_resume', filename=user.resume_filename) }}">Download current resume</a>
+                        {% endif %}
+                    </div>
+                </div>
+                <button class="btn btn-primary mt-3" type="submit">Save profile</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

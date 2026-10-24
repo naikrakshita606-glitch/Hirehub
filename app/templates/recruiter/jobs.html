@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-5">
+            <div class="card p-4 shadow-sm">
+                <h3>Post a job</h3>
+                <form method="post">
+                    <div class="mb-3"><input class="form-control" name="title" placeholder="Job title" required></div>
+                    <div class="mb-3"><input class="form-control" name="company" placeholder="Company" required></div>
+                    <div class="mb-3"><input class="form-control" name="location" placeholder="Location"></div>
+                    <div class="mb-3"><input class="form-control" name="salary" placeholder="Salary"></div>
+                    <div class="mb-3"><select class="form-select" name="job_type"><option value="full-time">Full-time</option><option value="part-time">Part-time</option><option value="contract">Contract</option></select></div>
+                    <div class="mb-3"><textarea class="form-control" name="description" rows="4" placeholder="Job description"></textarea></div>
+                    <div class="mb-3"><input class="form-control" name="requirements" placeholder="Requirements (comma separated)"></div>
+                    <button class="btn btn-primary" type="submit">Create job</button>
+                </form>
+            </div>
+        </div>
+        <div class="col-lg-7">
+            <h3>Published jobs</h3>
+            {% for job in jobs %}
+                <div class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                        <h5>{{ job.title }}</h5>
+                        <p>{{ job.company }} • {{ job.location }}</p>
+                        <span class="badge {% if job.status == 'closed' %}bg-secondary{% else %}bg-success{% endif %}">{{ job.status or 'published' }}</span>
+                        <small>{{ job.description[:150] }}</small>
+                        <div class="mt-2 d-flex gap-2">
+                            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('recruiter.edit_job', job_id=job.id) }}">Edit</a>
+                            {% if job.status != 'closed' %}
+                            <form method="post" action="{{ url_for('recruiter.close_job', job_id=job.id) }}"><button class="btn btn-sm btn-outline-secondary">Close job</button></form>
+                            {% endif %}
+                            <form method="post" action="{{ url_for('recruiter.delete_job', job_id=job.id) }}" onsubmit="return confirm('Delete this job?')"><button class="btn btn-sm btn-outline-danger">Delete</button></form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container py-5">
+    <h2>Schedule interviews</h2>
+    <div class="card mb-4"><div class="card-body">
+        <form method="post" class="row g-3">
+            <div class="col-md-6"><label class="form-label">Application</label><select class="form-select" name="application_id" required>
+                {% for application in applications %}
+                <option value="{{ application.id }}">{{ candidates.get(application.candidate_id, {}).get('full_name', 'Candidate') }} — {{ jobs.get(application.job_id, {}).get('title', 'Job') }}</option>
+                {% endfor %}
+            </select></div>
+            <div class="col-md-3"><label class="form-label">Date and time</label><input class="form-control" type="datetime-local" name="scheduled_at" required></div>
+            <div class="col-md-3"><label class="form-label">Mode</label><select class="form-select" name="mode"><option value="virtual">Virtual</option><option value="in-person">In person</option><option value="phone">Phone</option></select></div>
+            <div class="col-12"><label class="form-label">Notes / meeting details</label><textarea class="form-control" name="notes" rows="2"></textarea></div>
+            <div class="col-12"><button class="btn btn-primary" {% if not applications %}disabled{% endif %}>Schedule interview</button></div>
+        </form>
+    </div></div>
+    <h3>Scheduled</h3>
+    {% for interview in interviews %}
+        <div class="card mb-2"><div class="card-body">
+            <strong>{{ interview.scheduled_at }}</strong> — {{ candidates.get(interview.candidate_id, {}).get('full_name', 'Candidate') }}
+            <span class="badge bg-primary">{{ interview.status }}</span>
+            <div>{{ interview.mode|title }}{% if interview.notes %} · {{ interview.notes }}{% endif %}</div>
+            {% if interview.status == 'scheduled' %}
+            <form method="post" action="{{ url_for('recruiter.update_interview', interview_id=interview.id) }}" class="row g-2 mt-2">
+                <div class="col-md-4"><input class="form-control form-control-sm" type="datetime-local" name="scheduled_at" aria-label="Reschedule interview"></div>
+                <div class="col-md-3"><select class="form-select form-select-sm" name="mode"><option value="virtual">Virtual</option><option value="in-person">In person</option><option value="phone">Phone</option></select></div>
+                <div class="col-md-3"><input class="form-control form-control-sm" name="notes" placeholder="Updated notes"></div>
+                <div class="col-md-2 d-flex gap-1">
+                    <button class="btn btn-sm btn-outline-primary" name="action" value="reschedule">Update</button>
+                    <button class="btn btn-sm btn-outline-danger" name="status" value="cancelled">Cancel</button>
+                </div>
+            </form>
+            <form method="post" action="{{ url_for('recruiter.update_interview', interview_id=interview.id) }}" class="mt-2">
+                <button class="btn btn-sm btn-outline-success" name="status" value="completed">Mark completed</button>
+            </form>
+            {% endif %}
+        </div></div>
+    {% else %}
+        <p>No interviews scheduled.</p>
+    {% endfor %}
+</div>
+{% endblock %}
